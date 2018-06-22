@@ -48,7 +48,7 @@ class GoodsController extends Controller
     {
         $model = new Goods();
         $result = $model
-            ->selectRaw("color,usage,size,count(1) as total")
+            ->selectRaw("color,`usage`,size,count(1) as total")
             ->groupBy("size")
             ->get();
 
