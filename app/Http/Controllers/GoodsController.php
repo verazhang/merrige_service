@@ -20,9 +20,22 @@ class GoodsController extends Controller
      */
     public function create(Request $request)
     {
-        $attributes = $request->input('goods');
+        $fields = [
+            'usage',
+            'color',
+            'size',
+//            'code',
+            'cost',
+            'codehref',
+        ];
+        foreach ($fields as $field) {
+            $attributes[$field] = $request->input($field);
+        }
+        $attributes['is_sold'] = Goods::GOODS_IS_SOLD_NO;
+
         $model = new Goods();
-        $result = $model->save($attributes);
+        $model->setRawAttributes($attributes);
+        $result = $model->save();
 
         return $this->resultJson($model->getAttributes(), $result);
     }
@@ -33,8 +46,13 @@ class GoodsController extends Controller
      */
     public function getSummary()
     {
-//        $model = new Goods();
-        return $this->resultJson([]);
+        $model = new Goods();
+        $result = $model
+            ->selectRaw("color,usage,size,count(1) as total")
+            ->groupBy("color,usage,size")
+            ->get();
+
+        return $this->resultJson($result);
     }
 
 }

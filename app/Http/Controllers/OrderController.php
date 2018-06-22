@@ -19,9 +19,22 @@ class OrderController extends Controller
      */
     public function create(Request $request)
     {
-        $attributes = $request->input('order');
+        $fields = [
+            'name',
+            'phone',
+            'payment',
+            'cost',
+            'price',
+            'number',
+            'detail',
+            'note'
+        ];
+        foreach ($fields as $field) {
+            $attributes[$field] = $request->input($field);
+        }
         $model = new Order();
-        $result = $model->save($attributes);
+        $model->setRawAttributes($attributes);
+        $result = $model->save();
 
         return $this->resultJson($model->getAttributes(), $result);
     }

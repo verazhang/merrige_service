@@ -12,7 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Goods extends Model
 {
-    const GOODS_SIZE = ['M', 'L', 'XL', 'XXL', 'XXXL'];
+    const GOODS_SIZE = ['M', 'L', 'XL', '2XL', '3XL', '4XL'];
+    const GOODS_IS_SOLD_NO = 'new';
+    const GOODS_IS_SOLD_YES = 'sold';
 
     protected $table = "goods";
     protected $fillable = [
@@ -22,6 +24,7 @@ class Goods extends Model
         'size',
         'code',
         'cost',
+        'codehref',
         'is_sold',
         'created_at',
         'updated_at'
