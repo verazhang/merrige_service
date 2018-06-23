@@ -44,13 +44,25 @@ class GoodsController extends Controller
      * 获取商品概要信息
      * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function getSummary()
+    public function getSummary(Request $request)
     {
+        $fields = [
+            'usage',
+            'color',
+            'size',
+        ];
+
         $model = new Goods();
-        $result = $model
+        $model = $model
             ->selectRaw("color,`usage`,size,count(1) as total")
-            ->groupBy("size")
-            ->get();
+            ->groupBy("size");
+        foreach ($fields as $field) {
+            $attributes[$field] = $request->input($field);
+            $model->where($field, $attributes[$field]);
+        }
+        $p = $request->input("p");
+        $pagesize = Goods::GOODS_PAGESIZE;
+        $result = $model->offset(($p - 1) * $pagesize)->limit($pagesize)->get();
 
         return $this->resultJson($result);
     }

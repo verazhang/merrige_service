@@ -16,6 +16,7 @@ class Goods extends Model
     const GOODS_IS_SOLD_NO = 'new';
     const GOODS_IS_SOLD_YES = 'sold';
 
+    const GOODS_PAGESIZE = 20;
     protected $table = "goods";
     protected $fillable = [
         'id',
