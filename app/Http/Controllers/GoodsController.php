@@ -58,7 +58,9 @@ class GoodsController extends Controller
             ->groupBy("size");
         foreach ($fields as $field) {
             $attributes[$field] = $request->input($field);
-            $model->where($field, $attributes[$field]);
+            if ($attributes[$field]) {
+                $model->where($field, $attributes[$field]);
+            }
         }
         $p = $request->input("p");
         $pagesize = Goods::GOODS_PAGESIZE;
