@@ -21,6 +21,7 @@ $router->post('order/create', 'OrderController@create');
 /** 商品 */
 $router->post('goods/create', 'GoodsController@create');
 $router->get('goods/summary', 'GoodsController@getSummary');
+$router->get('goods/getucs', 'GoodsController@getUCS');
 
 /** 常用语  */
 $router->get('common/list', 'CommonController@getList');
