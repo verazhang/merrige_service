@@ -23,9 +23,11 @@ class GoodsController extends Controller
     public function getUCS(Request $request)
     {
         $client = new AipOcr(self::APP_ID, self::API_KEY, self::SECRET_KEY);
-//        $url = "http://img0.bdstatic.com/static/searchresult/img/logo-2X_b99594a.png";
-        $url = "http://tmp/wxf6c742d846d66c03.o6zAJs-yVDgUBrJg6XmV….tdpZjAyzB6bv206b0da01501c5a5c19c4c8f90e23ff6.jpg";
-        $url = $request->get("url");//"http://local.merrige.com/goods/image";
+        $url = "http://img0.bdstatic.com/static/searchresult/img/logo-2X_b99594a.png";
+//        $url = "http://tmp/wxf6c742d846d66c03.o6zAJs-yVDgUBrJg6XmV….tdpZjAyzB6bv206b0da01501c5a5c19c4c8f90e23ff6.jpg";
+        $url = "http://119.27.163.89:8090/goods/image/wxf6c742d846d66c03.o6zAJs-yVDgUBrJg6XmVAcqKEQyQ.OXOwORJvOGGr206b0da01501c5a5c19c4c8f90e23ff6.jpg";//$request->get("url");//"http://local.merrige.com/goods/image";
+        $filename = $request->input("name");
+        $image = file_get_contents(storage_path()."/app/".$filename);
 // 如果有可选参数
         $options = array();
         $options["language_type"] = "CHN_ENG";
@@ -33,13 +35,18 @@ class GoodsController extends Controller
         $options["detect_language"] = "true";
         $options["probability"] = "true";
 
+        // 带参数调用通用文字识别, 图片参数为本地图片
+        $res = $client->basicGeneral($image, $options);
+
 // 带参数调用通用文字识别, 图片参数为远程url图片
-        $res = $client->basicGeneralUrl($url);
+//        $res = $client->basicGeneralUrl($url);
 
 //        $image = file_get_contents(storage_path('app/mmexport.jpg'));
 //        $res = $client->basicGeneral($image);
-        return $this->resultJson($res);
-//    $res['words_result'] = [
+        if (!$res["words_result"]) {
+            return $this->resultJson($res);
+        }
+//words_result'] = [
 //        ["words"=> "品牌: MERRIGE"],
 //        ["words"=> "晶名:科技塑身纤体衣"],
 //        ["words"=> "羡计微线"],
