@@ -206,9 +206,9 @@ class GoodsController extends Controller
 //        return $this->resultJson($filename);
     }
 
-    public function image(Request $request)
+    public function image($filename)//Request $request
     {
-        $filename = $request->input("name");
+//        $filename = $request->input("name");
         //输出图片
         header('Content-type: image/jpg');
         echo file_get_contents(storage_path()."/app/".$filename);
