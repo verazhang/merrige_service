@@ -35,8 +35,6 @@ class GoodsController extends Controller
 
         // 带参数调用通用文字识别, 图片参数为本地图片
         $res = $client->basicGeneral($image);
-
-        return $this->resultJson($res);
         
         if (!$res["words_result"]) {
             return $this->resultJson($res);
