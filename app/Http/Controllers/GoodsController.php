@@ -23,12 +23,10 @@ class GoodsController extends Controller
     public function getUCS(Request $request)
     {
         $client = new AipOcr(self::APP_ID, self::API_KEY, self::SECRET_KEY);
-        $url = "http://img0.bdstatic.com/static/searchresult/img/logo-2X_b99594a.png";
-//        $url = "http://tmp/wxf6c742d846d66c03.o6zAJs-yVDgUBrJg6XmV….tdpZjAyzB6bv206b0da01501c5a5c19c4c8f90e23ff6.jpg";
-        $url = "http://119.27.163.89:8090/goods/image/wxf6c742d846d66c03.o6zAJs-yVDgUBrJg6XmVAcqKEQyQ.OXOwORJvOGGr206b0da01501c5a5c19c4c8f90e23ff6.jpg";//$request->get("url");//"http://local.merrige.com/goods/image";
+
         $filename = $request->input("name");
         $image = file_get_contents(storage_path()."/app/".$filename);
-// 如果有可选参数
+        //可选参数
         $options = array();
         $options["language_type"] = "CHN_ENG";
         $options["detect_direction"] = "true";
@@ -36,28 +34,11 @@ class GoodsController extends Controller
         $options["probability"] = "true";
 
         // 带参数调用通用文字识别, 图片参数为本地图片
-        $res = $client->basicGeneral($image, $options);
+        $res = $client->basicGeneral($image);
 
-// 带参数调用通用文字识别, 图片参数为远程url图片
-//        $res = $client->basicGeneralUrl($url);
-
-//        $image = file_get_contents(storage_path('app/mmexport.jpg'));
-//        $res = $client->basicGeneral($image);
         if (!$res["words_result"]) {
             return $this->resultJson($res);
         }
-//words_result'] = [
-//        ["words"=> "品牌: MERRIGE"],
-//        ["words"=> "晶名:科技塑身纤体衣"],
-//        ["words"=> "羡计微线"],
-//        ["words"=> "负号:0087#"],
-//        ["words"=> "颜色:凝脂肤色"],
-//        ["words"=> "尺码:2XL"],
-//        ["words"=> "手机扫码辨百伪"],
-//        ["words"=> "物滴码:809413162811"],
-//        ["words"=> "市场指导价:￥￥1688RMB"],
-//        ["words"=> "排排排排体"]
-//    ];
         $init = [];
         foreach ($res['words_result'] as $i => $item) {
             switch ($i) {
@@ -190,12 +171,6 @@ class GoodsController extends Controller
         }
     }
 
-    public function test()
-    {
-        return view("goods.test");
-    }
-
-
     public function upload(Request $request)
     {
         $destinationPath = storage_path()."/app";
@@ -209,16 +184,6 @@ class GoodsController extends Controller
         $filename = $file->getClientOriginalName();
         $file->move($destinationPath, $filename);
         echo $filename;
-        exit;
-//        return $this->resultJson($filename);
-    }
-
-    public function image($filename)//Request $request
-    {
-//        $filename = $request->input("name");
-        //输出图片
-        header('Content-type: image/jpg');
-        echo file_get_contents(storage_path()."/app/".$filename);
         exit;
     }
 }
