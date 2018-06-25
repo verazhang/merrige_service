@@ -20,12 +20,12 @@ class GoodsController extends Controller
     const API_KEY = '2xZHYPsT5uZhPxi0GKFLo6OR';
     const SECRET_KEY = 'MM9NNAu7GAmeVDZIlkmdcvFr8UfxF8UW';
 
-    public function getUCS()
+    public function getUCS(Request $request)
     {
         $client = new AipOcr(self::APP_ID, self::API_KEY, self::SECRET_KEY);
 //        $url = "http://img0.bdstatic.com/static/searchresult/img/logo-2X_b99594a.png";
         $url = "http://tmp/wxf6c742d846d66c03.o6zAJs-yVDgUBrJg6XmV….tdpZjAyzB6bv206b0da01501c5a5c19c4c8f90e23ff6.jpg";
-        $url = "http://local.merrige.com/goods/image";
+        $url = $request->get("url");//"http://local.merrige.com/goods/image";
 // 如果有可选参数
         $options = array();
         $options["language_type"] = "CHN_ENG";
@@ -201,7 +201,9 @@ class GoodsController extends Controller
         }
         $filename = $file->getClientOriginalName();
         $file->move($destinationPath, $filename);
-        return $this->resultJson($filename);
+        echo $filename;
+        exit;
+//        return $this->resultJson($filename);
     }
 
     public function image(Request $request)
