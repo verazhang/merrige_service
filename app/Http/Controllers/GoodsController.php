@@ -36,37 +36,39 @@ class GoodsController extends Controller
         // 带参数调用通用文字识别, 图片参数为本地图片
         $res = $client->basicGeneral($image);
 
+        return $this->resultJson($res);
+        
         if (!$res["words_result"]) {
             return $this->resultJson($res);
         }
         $init = [];
         foreach ($res['words_result'] as $i => $item) {
-            switch ($i) {
-                case 1:
-                    $words = explode(":", $item['words']);
-                    $init['usage'] = $words[1];
-                    break;
-                case 4:
-                    $words = explode(":", $item['words']);
-                    $init['color'] = $words[1];
-                    break;
-                case 5:
-                    $words = explode(":", $item['words']);
-                    $init['size'] = $words[1];
-                    break;
+//            switch ($i) {
+//                case 1:
+//                    $words = explode(":", $item['words']);
+//                    $init['usage'] = $words[1];
+//                    break;
+//                case 4:
+//                    $words = explode(":", $item['words']);
+//                    $init['color'] = $words[1];
+//                    break;
+//                case 5:
+//                    $words = explode(":", $item['words']);
+//                    $init['size'] = $words[1];
+//                    break;
+//            }
+            if (($pos = strpos($item['words'], "品名:")) !== false)  {
+                $words = explode(":", $item['words']);
+                $init['usage'] = $words[1];
             }
-//            if (($pos = strpos($item['words'], "品名:")) !== false)  {
-//                $words = explode(":", $item['words']);
-//                $init['usage'] = $words[1];
-//            }
-//            if (($pos = strpos($item['words'], "颜色:")) !== false)  {
-//                $words = explode(":", $item['words']);
-//                $init['color'] = $words[1];
-//            }
-//            if (($pos = strpos($item['words'], "尺码:")) !== false)  {
-//                $words = explode(":", $item['words']);
-//                $init['size'] = $words[1];
-//            }
+            if (($pos = strpos($item['words'], "颜色:")) !== false)  {
+                $words = explode(":", $item['words']);
+                $init['color'] = $words[1];
+            }
+            if (($pos = strpos($item['words'], "尺码:")) !== false)  {
+                $words = explode(":", $item['words']);
+                $init['size'] = $words[1];
+            }
         }
 
 
