@@ -22,6 +22,9 @@ $router->post('order/create', 'OrderController@create');
 $router->post('goods/create', 'GoodsController@create');
 $router->get('goods/summary', 'GoodsController@getSummary');
 $router->get('goods/getucs', 'GoodsController@getUCS');
+$router->post('goods/upload', 'GoodsController@upload');
+$router->get('goods/test', 'GoodsController@test');
+$router->get('goods/image', 'GoodsController@image');
 
 /** 常用语  */
 $router->get('common/list', 'CommonController@getList');

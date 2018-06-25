@@ -24,6 +24,8 @@ class GoodsController extends Controller
     {
         $client = new AipOcr(self::APP_ID, self::API_KEY, self::SECRET_KEY);
 //        $url = "http://img0.bdstatic.com/static/searchresult/img/logo-2X_b99594a.png";
+        $url = "http://tmp/wxf6c742d846d66c03.o6zAJs-yVDgUBrJg6XmV….tdpZjAyzB6bv206b0da01501c5a5c19c4c8f90e23ff6.jpg";
+        $url = "http://local.merrige.com/goods/image";
 // 如果有可选参数
         $options = array();
         $options["language_type"] = "CHN_ENG";
@@ -32,11 +34,11 @@ class GoodsController extends Controller
         $options["probability"] = "true";
 
 // 带参数调用通用文字识别, 图片参数为远程url图片
-//        $res = $client->basicGeneralUrl($url);
+        $res = $client->basicGeneralUrl($url);
 
-        $image = file_get_contents(storage_path('app/mmexport.jpg'));
-        $res = $client->basicGeneral($image);
-//        return $this->resultJson($res);
+//        $image = file_get_contents(storage_path('app/mmexport.jpg'));
+//        $res = $client->basicGeneral($image);
+        return $this->resultJson($res);
 //    $res['words_result'] = [
 //        ["words"=> "品牌: MERRIGE"],
 //        ["words"=> "晶名:科技塑身纤体衣"],
@@ -139,4 +141,75 @@ class GoodsController extends Controller
         return $this->resultJson($result);
     }
 
+    /**
+     * 格式化size显示
+     */
+    protected function formatSize($b, $times=0)
+    {
+        if ($b > 1024) {
+            $temp = $b / 1024;
+            return $this->formatSize($temp, $times + 1);
+        } else {
+            $unit = 'B';
+            switch ($times) {
+                case '0':
+                    $unit = 'B';
+                    break;
+                case '1':
+                    $unit = 'KB';
+                    break;
+                case '2':
+                    $unit = 'MB';
+                    break;
+                case '3':
+                    $unit = 'GB';
+                    break;
+                case '4':
+                    $unit = 'TB';
+                    break;
+                case '5':
+                    $unit = 'PB';
+                    break;
+                case '6':
+                    $unit = 'EB';
+                    break;
+                case '7':
+                    $unit = 'ZB';
+                    break;
+                default:
+                    $unit = '单位未知';
+            }
+            return sprintf('%.2f', $b) . $unit;
+        }
+    }
+
+    public function test()
+    {
+        return view("goods.test");
+    }
+
+
+    public function upload(Request $request)
+    {
+        $destinationPath = storage_path()."/app";
+        $file = $request->file('file');
+        if (!$file->isValid()) {
+            return $this->resultJson('', Controller::STATUS_FAIL, "无效文件");
+        }
+        if ($file->getMaxFilesize() < $file->getClientSize()) {
+            return $this->resultJson('', Controller::STATUS_FAIL, '允许上传文件最大为'.$this->formatSize($file->getMaxFilesize()));
+        }
+        $filename = $file->getClientOriginalName();
+        $file->move($destinationPath, $filename);
+        return $this->resultJson($filename);
+    }
+
+    public function image(Request $request)
+    {
+        $filename = $request->input("name");
+        //输出图片
+        header('Content-type: image/jpg');
+        echo file_get_contents(storage_path()."/app/".$filename);
+        exit;
+    }
 }
