@@ -29,11 +29,13 @@ class OrderController extends Controller
             'detail',
             'note'
         ];
-        foreach ($fields as $field) {
-            $attributes[$field] = $request->input($field);
-        }
         $model = new Order();
-        $model->setRawAttributes($attributes);
+        foreach ($fields as $field) {
+//            $attributes[$field] = $request->input($field);
+            $model->$field = $request->input($field);
+        }
+
+//        $model->setRawAttributes($attributes);
         $result = $model->save();
 
         return $this->resultJson($model->getAttributes(), $result);
