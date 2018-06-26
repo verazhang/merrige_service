@@ -23,16 +23,21 @@ class OrderController extends Controller
             'name',
             'phone',
             'payment',
-            'cost',
+//            'cost',
             'price',
-            'number',
+//            'number',
             'detail',
             'note'
         ];
         $model = new Order();
         foreach ($fields as $field) {
 //            $attributes[$field] = $request->input($field);
-            $model->setAttribute($field, $request->input($field));
+            $value = $request->input($field);
+            if ($field == "detail") {
+                $model->setAttribute($field, json_encode($value));
+            } else {
+                $model->setAttribute($field, $value);
+            }
         }
 
 //        $model->setRawAttributes($attributes);
