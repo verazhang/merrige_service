@@ -32,7 +32,7 @@ class OrderController extends Controller
         $model = new Order();
         foreach ($fields as $field) {
 //            $attributes[$field] = $request->input($field);
-            $model->$field = $request->input($field);
+            $model->setAttribute($field, $request->input($field));
         }
 
 //        $model->setRawAttributes($attributes);
