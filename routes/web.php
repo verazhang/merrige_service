@@ -28,3 +28,6 @@ $router->post('goods/upload', 'GoodsController@upload');
 $router->get('common/list', 'CommonController@getList');
 $router->get('common/get/{id}', 'CommonController@get');
 $router->post('common/update/{id}', 'CommonController@update');
+
+/**统计相关**/
+$router->get('report/goods', 'ReportController@getGoods');
