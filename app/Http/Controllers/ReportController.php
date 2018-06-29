@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\Goods;
+use App\Order;
 
 class ReportController extends Controller
 {
@@ -27,6 +28,21 @@ class ReportController extends Controller
             "total_by_color" => $totalByColor,
             "total_by_usage" => $totalByUsage,
             "total_by_size" => $totalBySize,
+        ]);
+    }
+
+    public function getOrder()
+    {
+        $orderModel = new Order();
+        $totalOrder = $orderModel->count();
+        $totalCost = $orderModel->sum("cost");
+        $totalPrice = $orderModel->sum("proce");
+
+        return $this->resultJson([
+            "total_order" => $totalOrder,
+            "total_cost" => $totalCost,
+            "total_price" => $totalPrice,
+            "total_income" => $totalPrice - $totalCost
         ]);
     }
 }

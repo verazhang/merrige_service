@@ -31,3 +31,4 @@ $router->post('common/update/{id}', 'CommonController@update');
 
 /**统计相关**/
 $router->get('report/goods', 'ReportController@getGoods');
+$router->get('report/order', 'ReportController@getOrder');
