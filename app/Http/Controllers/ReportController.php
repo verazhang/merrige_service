@@ -36,7 +36,7 @@ class ReportController extends Controller
         $orderModel = new Order();
         $totalOrder = $orderModel->count();
         $totalCost = $orderModel->sum("cost");
-        $totalPrice = $orderModel->sum("proce");
+        $totalPrice = $orderModel->sum("price");
 
         return $this->resultJson([
             "total_order" => $totalOrder,
