@@ -42,7 +42,7 @@ class ReportController extends Controller
             "total_order" => $totalOrder,
             "total_cost" => $totalCost,
             "total_price" => $totalPrice,
-            "total_income" => $totalPrice - $totalCost
+            "total_income" => round($totalPrice - $totalCost, 2)
         ]);
     }
 }
